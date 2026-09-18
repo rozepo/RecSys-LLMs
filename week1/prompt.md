@@ -1,5 +1,13 @@
 ## Q: I need to code random lunch menu recsys then publish this into github page. Let's first write the description readme.
 
+Requirements for icons in the README and any code generated for this project:
+* Use only icon classes available in the **free Font Awesome 6.4.0** distribution loaded from `https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css`.
+* Before using any icon name, verify that its exact class has an icon definition in that stylesheet, including names used in the menu data and the page UI. Do not infer class names from dish names or rely on icons from Pro or other versions.
+* Do not use `fa-bowl-hot`, `fa-pasta`, or `fa-bowl`: they are absent from this distribution. If a dish has no suitable dedicated icon, choose a verified free alternative, such as `fas fa-utensils`, rather than inventing a class name.
+* If you cannot verify an icon name, explicitly state that verification is incomplete rather than presenting the name as verified.
+
+## A:
+
 Of course! This is a great project. A well-written README is crucial for any GitHub repository.
 
 Here is a comprehensive and professional README.md template you can use. It's structured to explain your project clearly to anyone who visits your GitHub page.

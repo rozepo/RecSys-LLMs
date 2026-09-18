@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Get a random lunch idea with one click. No sign-up, just something delicious to try.">
+    <title>Random Lunch Menu Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px 16px;
+            background: #f3f5ed;
+            color: #23352b;
+            font-family: system-ui, sans-serif;
+            line-height: 1.5;
+        }
+
+        main {
+            width: 100%;
+            max-width: 560px;
+            padding: clamp(20px, 5vw, 40px);
+            border: 1px solid #dce3d6;
+            border-radius: 24px;
+            background: #fff;
+            box-shadow: 0 16px 48px #23352b12;
+            text-align: center;
+        }
+
+        .brand-icon {
+            color: #386641;
+            font-size: 2rem;
+        }
+
+        h1 {
+            margin: 12px 0;
+            font-size: clamp(1.6rem, 5vw, 2.3rem);
+            line-height: 1.2;
+        }
+
+        .intro, footer {
+            color: #546254;
+        }
+
+        .result {
+            display: grid;
+            justify-items: center;
+            align-content: center;
+            gap: 12px;
+            min-height: 220px;
+            margin: 28px 0;
+            padding: 24px 16px;
+            border-radius: 16px;
+            background: #f3f5ed;
+        }
+
+        .result-icon {
+            color: #386641;
+            font-size: 3.5rem;
+        }
+
+        h2 {
+            margin: 0;
+            max-width: 100%;
+            overflow-wrap: anywhere;
+            font-size: clamp(1.4rem, 4vw, 1.9rem);
+        }
+
+        button {
+            width: 100%;
+            padding: 16px 20px;
+            border: 0;
+            border-radius: 12px;
+            background: #386641;
+            color: #fff;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #294d30;
+        }
+
+        button:focus-visible, a:focus-visible {
+            outline: 3px solid #a65816;
+            outline-offset: 4px;
+        }
+
+        button i {
+            margin-right: 8px;
+        }
+
+        footer {
+            margin-top: 24px;
+            font-size: 0.85rem;
+        }
+
+        a {
+            color: #386641;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <header>
+            <i class="fa-solid fa-utensils brand-icon" aria-hidden="true"></i>
+            <h1>Random Lunch Menu Generator</h1>
+            <p class="intro">One less decision today. Pick a random idea for your next lunch.</p>
+        </header>
+
+        <section class="result" aria-live="polite" aria-atomic="true" aria-labelledby="lunch-name">
+            <i id="lunch-icon" class="fa-solid fa-utensils result-icon" aria-hidden="true"></i>
+            <h2 id="lunch-name">What sounds good today?</h2>
+        </section>
+
+        <button id="generate-lunch" type="button">
+            <i class="fa-solid fa-shuffle" aria-hidden="true"></i>Generate Lunch!
+        </button>
+        <p class="intro">Want another idea? Click again!</p>
+        <noscript><p>Please enable JavaScript to generate a lunch suggestion.</p></noscript>
+
+        <footer>Icons by <a href="https://fontawesome.com/">Font Awesome</a>.</footer>
+    </main>
+
+    <script>
+        // Every icon below, plus utensils and shuffle in the UI, was checked
+        // against the exact Font Awesome Free 6.4.0 stylesheet linked above.
+        const lunchMenu = [
+            { name: 'Pizza', icon: 'fa-pizza-slice' },
+            { name: 'Sushi', icon: 'fa-fish' },
+            { name: 'Burger', icon: 'fa-burger' },
+            { name: 'Salad', icon: 'fa-leaf' },
+            { name: 'Tacos', icon: 'fa-utensil-spoon' },
+            { name: 'Ramen', icon: 'fa-bowl-food' },
+            { name: 'Sandwich', icon: 'fa-bread-slice' },
+            { name: 'Pasta', icon: 'fa-plate-wheat' },
+            { name: 'Curry', icon: 'fa-mortar-pestle' },
+            { name: 'Steak', icon: 'fa-drumstick-bite' },
+            { name: 'Soup', icon: 'fa-spoon' },
+            { name: 'BBQ', icon: 'fa-fire' }
+        ];
+
+        const generateButton = document.getElementById('generate-lunch');
+        const lunchIcon = document.getElementById('lunch-icon');
+        const lunchName = document.getElementById('lunch-name');
+        const result = document.querySelector('.result');
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        let revealAnimation;
+
+        generateButton.addEventListener('click', () => {
+            const lunch = lunchMenu[Math.floor(Math.random() * lunchMenu.length)];
+            lunchIcon.className = `fa-solid ${lunch.icon} result-icon`;
+            lunchName.textContent = lunch.name;
+
+            if (revealAnimation) {
+                revealAnimation.cancel();
+            }
+            if (!reducedMotion.matches && typeof result.animate === 'function') {
+                revealAnimation = result.animate(
+                    [
+                        { opacity: 0.5, transform: 'translateY(6px)' },
+                        { opacity: 1, transform: 'translateY(0)' }
+                    ],
+                    { duration: 200, easing: 'ease-out' }
+                );
+            }
+        });
+    </script>
+</body>
+</html>
