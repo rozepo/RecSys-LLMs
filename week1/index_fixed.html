@@ -106,6 +106,29 @@
         a {
             color: #386641;
         }
+
+        .icon-note, .icon-guide {
+            color: #546254;
+            font-size: 0.9rem;
+        }
+
+        .icon-note {
+            margin: 0;
+        }
+
+        .icon-guide {
+            margin-top: 24px;
+            text-align: left;
+        }
+
+        summary {
+            cursor: pointer;
+        }
+
+        .icon-guide li {
+            margin: 8px 0;
+            overflow-wrap: anywhere;
+        }
     </style>
 </head>
 <body>
@@ -119,6 +142,7 @@
         <section class="result" aria-live="polite" aria-atomic="true" aria-labelledby="lunch-name">
             <i id="lunch-icon" class="fa-solid fa-utensils result-icon" aria-hidden="true"></i>
             <h2 id="lunch-name">What sounds good today?</h2>
+            <p id="icon-note" class="icon-note"></p>
         </section>
 
         <button id="generate-lunch" type="button">
@@ -127,6 +151,14 @@
         <p class="intro">Want another idea? Click again!</p>
         <noscript><p>Please enable JavaScript to generate a lunch suggestion.</p></noscript>
 
+        <details class="icon-guide">
+            <summary>About the food icons</summary>
+            <p>Font Awesome Free 6.4.0 has dedicated icons for Pizza and Burger.
+                These dishes have no dedicated icon in that free set, so the alternatives below are used.
+                Soup and BBQ use the explicitly requested hot-mug and fire symbols rather than food or ingredient icons:</p>
+            <ul id="icon-alternatives"></ul>
+        </details>
+
         <footer>Icons by <a href="https://fontawesome.com/">Font Awesome</a>.</footer>
     </main>
 
@@ -134,31 +166,46 @@
         // Every icon below, plus utensils and shuffle in the UI, was checked
         // against the exact Font Awesome Free 6.4.0 stylesheet linked above.
         const lunchMenu = [
-            { name: 'Pizza', icon: 'fa-pizza-slice' },
-            { name: 'Sushi', icon: 'fa-fish' },
-            { name: 'Burger', icon: 'fa-burger' },
-            { name: 'Salad', icon: 'fa-leaf' },
-            { name: 'Tacos', icon: 'fa-utensil-spoon' },
-            { name: 'Ramen', icon: 'fa-bowl-food' },
-            { name: 'Sandwich', icon: 'fa-bread-slice' },
-            { name: 'Pasta', icon: 'fa-plate-wheat' },
-            { name: 'Curry', icon: 'fa-mortar-pestle' },
-            { name: 'Steak', icon: 'fa-drumstick-bite' },
-            { name: 'Soup', icon: 'fa-spoon' },
-            { name: 'BBQ', icon: 'fa-fire' }
+            { name: 'Pizza', icon: 'fa-pizza-slice', alternative: '' },
+            { name: 'Sushi', icon: 'fa-fish', alternative: 'fish, a common sushi ingredient' },
+            { name: 'Burger', icon: 'fa-hamburger', alternative: '' },
+            { name: 'Salad', icon: 'fa-leaf', alternative: 'a leaf representing salad greens' },
+            { name: 'Tacos', icon: 'fa-pepper-hot', alternative: 'a chili pepper representing a taco ingredient' },
+            { name: 'Ramen', icon: 'fa-bowl-food', alternative: 'a bowl of food representing a bowl of ramen' },
+            { name: 'Sandwich', icon: 'fa-bread-slice', alternative: 'bread, the base of a sandwich' },
+            { name: 'Pasta', icon: 'fa-plate-wheat', alternative: 'a plate with wheat representing a wheat-based meal' },
+            { name: 'Curry', icon: 'fa-bowl-rice', alternative: 'rice, a common accompaniment to curry' },
+            { name: 'Steak', icon: 'fa-drumstick-bite', alternative: 'a poultry drumstick as a general meat symbol, not a steak depiction' },
+            { name: 'Soup', icon: 'fa-mug-hot', alternative: 'a steaming mug suggesting hot soup, as explicitly requested' },
+            { name: 'BBQ', icon: 'fa-fire', alternative: 'fire representing barbecue cooking, as explicitly requested' }
         ];
 
         const generateButton = document.getElementById('generate-lunch');
         const lunchIcon = document.getElementById('lunch-icon');
         const lunchName = document.getElementById('lunch-name');
+        const iconNote = document.getElementById('icon-note');
+        const iconAlternatives = document.getElementById('icon-alternatives');
         const result = document.querySelector('.result');
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
         let revealAnimation;
+
+        function describeAlternative(lunch) {
+            return lunch.alternative
+                ? `${lunch.name} has no dedicated icon in Font Awesome Free 6.4.0. Using ${lunch.icon}: ${lunch.alternative}.`
+                : '';
+        }
+
+        lunchMenu.filter(lunch => lunch.alternative).forEach(lunch => {
+            const item = document.createElement('li');
+            item.textContent = describeAlternative(lunch);
+            iconAlternatives.appendChild(item);
+        });
 
         generateButton.addEventListener('click', () => {
             const lunch = lunchMenu[Math.floor(Math.random() * lunchMenu.length)];
             lunchIcon.className = `fa-solid ${lunch.icon} result-icon`;
             lunchName.textContent = lunch.name;
+            iconNote.textContent = describeAlternative(lunch);
 
             if (revealAnimation) {
                 revealAnimation.cancel();
