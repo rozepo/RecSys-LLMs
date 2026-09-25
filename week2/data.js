@@ -2,9 +2,9 @@
 let movies = [];
 let ratings = [];
 
-// Genre names as defined in the u.item file
+// All 19 flags in u.genre order, corresponding to u.item fields 5–23.
 const genreNames = [
-    "Action", "Adventure", "Animation", "Children's", "Comedy",
+    "unknown", "Action", "Adventure", "Animation", "Children's", "Comedy",
     "Crime", "Documentary", "Drama", "Fantasy", "Film-Noir",
     "Horror", "Musical", "Mystery", "Romance", "Sci-Fi",
     "Thriller", "War", "Western"
@@ -18,8 +18,9 @@ async function loadData() {
         if (!moviesResponse.ok) {
             throw new Error(`Failed to load movie data: ${moviesResponse.status}`);
         }
-        const moviesText = await moviesResponse.text();
-        parseItemData(moviesText);
+        const moviesBuffer = await moviesResponse.arrayBuffer();
+        const moviesText = new TextDecoder('iso-8859-1').decode(moviesBuffer);
+        const parsedMovies = parseItemData(moviesText);
 
         // Load and parse rating data
         const ratingsResponse = await fetch('u.data');
@@ -27,54 +28,75 @@ async function loadData() {
             throw new Error(`Failed to load rating data: ${ratingsResponse.status}`);
         }
         const ratingsText = await ratingsResponse.text();
-        parseRatingData(ratingsText);
+        const parsedRatings = parseRatingData(ratingsText);
+
+        // Commit both datasets together; repeated loads replace, never append.
+        movies = parsedMovies;
+        ratings = parsedRatings;
     } catch (error) {
-        console.error('Error loading data:', error);
-        const resultElement = document.getElementById('result');
-        if (resultElement) {
-            resultElement.textContent = `Error: ${error.message}. Please make sure u.item and u.data files are in the correct location.`;
-            resultElement.className = 'error';
-        }
-        throw error; // Re-throw to allow script.js to handle the error
+        throw new Error(`Unable to load data: ${error.message}`);
     }
+}
+
+// Reject partial numbers, empty fields, fractions and unsafe integers.
+function parseIntegerField(value, minimum, maximum, context) {
+    const number = Number(value);
+    if (!/^\d+$/.test(value) || !Number.isSafeInteger(number) ||
+        number < minimum || number > maximum) {
+        throw new Error(`Invalid ${context}`);
+    }
+    return number;
 }
 
 // Parse movie data from u.item format
 function parseItemData(text) {
-    const lines = text.split('\n');
-    
-    for (const line of lines) {
+    const lines = text.split(/\r?\n/);
+    const parsedMovies = [];
+    const seenIds = new Set();
+
+    for (const [index, line] of lines.entries()) {
         if (line.trim() === '') continue;
-        
+
         const fields = line.split('|');
-        if (fields.length < 5) continue; // Skip invalid lines
-        
-        const id = parseInt(fields[0]);
+        const context = `u.item line ${index + 1}`;
+        if (fields.length !== 24) throw new Error(`Expected 24 fields at ${context}`);
+
+        const id = parseIntegerField(fields[0], 1, Number.MAX_SAFE_INTEGER, context);
         const title = fields[1];
-        
-        // Extract genres (last 19 fields)
-        const genreValues = fields.slice(5, 24).map(value => parseInt(value));
-        const genres = genreNames.filter((_, index) => genreValues[index] === 1);
-        
-        movies.push({ id, title, genres });
+        const flags = fields.slice(5, 24);
+        if (!title.trim() || seenIds.has(id) ||
+            flags.some(flag => flag !== '0' && flag !== '1')) {
+            throw new Error(`Invalid title, duplicate ID or genre flags at ${context}`);
+        }
+
+        const genreVector = flags.map(Number);
+        const genres = genreNames.filter((_, i) => genreVector[i] === 1);
+        seenIds.add(id);
+        parsedMovies.push({ id, title, genres, genreVector });
     }
+    if (parsedMovies.length === 0) throw new Error('No movies parsed from u.item');
+    return parsedMovies;
 }
 
 // Parse rating data from u.data format
 function parseRatingData(text) {
-    const lines = text.split('\n');
-    
-    for (const line of lines) {
+    const lines = text.split(/\r?\n/);
+    const parsedRatings = [];
+
+    for (const [index, line] of lines.entries()) {
         if (line.trim() === '') continue;
-        
+
         const fields = line.split('\t');
-        if (fields.length < 4) continue; // Skip invalid lines
-        
-        const userId = parseInt(fields[0]);
-        const itemId = parseInt(fields[1]);
-        const rating = parseFloat(fields[2]);
-        const timestamp = parseInt(fields[3]);
-        
-        ratings.push({ userId, itemId, rating, timestamp });
+        const context = `u.data line ${index + 1}`;
+        if (fields.length !== 4) throw new Error(`Expected 4 fields at ${context}`);
+
+        const userId = parseIntegerField(fields[0], 1, Number.MAX_SAFE_INTEGER, context);
+        const itemId = parseIntegerField(fields[1], 1, Number.MAX_SAFE_INTEGER, context);
+        const rating = parseIntegerField(fields[2], 1, 5, context);
+        const timestamp = parseIntegerField(fields[3], 0, Number.MAX_SAFE_INTEGER, context);
+
+        parsedRatings.push({ userId, itemId, rating, timestamp });
     }
+    if (parsedRatings.length === 0) throw new Error('No ratings parsed from u.data');
+    return parsedRatings;
 }

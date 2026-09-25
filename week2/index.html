@@ -9,17 +9,36 @@
 <body>
     <div class="container">
         <h1>Content-Based Movie Recommender</h1>
-        <p>Select a movie you like, and we'll find similar ones for you!</p>
+        <p>Select one movie you like, or build a profile from exactly three distinct movies.</p>
         
         <div class="controls">
-            <select id="movie-select">
+            <label for="recommendation-mode">Recommendation mode</label>
+            <select id="recommendation-mode" disabled>
+                <option value="single">One movie</option>
+                <option value="profile">Three-movie profile</option>
+            </select>
+            <label for="movie-select">Movie 1</label>
+            <select id="movie-select" disabled>
                 <option value="" disabled selected>Select a movie</option>
             </select>
-            <button id="recommend-btn" onclick="getRecommendations()">Get Recommendations</button>
+            <div id="movie-select-2-group" class="movie-field" hidden>
+                <label for="movie-select-2">Movie 2</label>
+                <select id="movie-select-2" disabled>
+                    <option value="" disabled selected>Select a movie</option>
+                </select>
+            </div>
+            <div id="movie-select-3-group" class="movie-field" hidden>
+                <label for="movie-select-3">Movie 3</label>
+                <select id="movie-select-3" disabled>
+                    <option value="" disabled selected>Select a movie</option>
+                </select>
+            </div>
+            <button id="recommend-btn" onclick="getRecommendations()" disabled>Get Recommendations</button>
         </div>
         
-        <div id="result-box">
-            <p id="result">Please wait, loading data...</p>
+        <div id="result-box" aria-live="polite">
+            <p id="result" class="loading">Please wait, loading data...</p>
+            <ol id="recommendations"></ol>
         </div>
     </div>
 
