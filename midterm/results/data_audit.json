@@ -1,0 +1,95 @@
+{
+  "schedule": {
+    "export_arh_11-20-final.csv": {
+      "rows": 1074235,
+      "labelled_rows": 115613,
+      "programmes": 5847,
+      "channels": 400
+    },
+    "export_arh_21-30-final.csv": {
+      "rows": 1074394,
+      "labelled_rows": 121505,
+      "programmes": 6363,
+      "channels": 403
+    },
+    "export_arh_31-42-final.csv": {
+      "rows": 1295378,
+      "labelled_rows": 144774,
+      "programmes": 6636,
+      "channels": 404
+    }
+  },
+  "windows": {
+    "train": {
+      "view_rows_clipped": 3945173,
+      "view_seconds": 4925125033,
+      "covered_seconds": 4474311002,
+      "labelled_seconds": 2451928356,
+      "zero_seconds": 2022382646,
+      "intersection_pairs": 4920893,
+      "labelled_pairs": 2383294,
+      "interaction_seconds_raw": 2451928356,
+      "user_item_pairs": 856904,
+      "users_with_labelled_history": 4841,
+      "positive_pair_seconds_quantiles": {
+        "0.25": 200.0,
+        "0.5": 818.0,
+        "0.75": 2967.0,
+        "0.9": 6260.0,
+        "0.99": 32387.669999999693
+      }
+    },
+    "validation": {
+      "view_rows_clipped": 1877821,
+      "view_seconds": 3694511391,
+      "covered_seconds": 3633405482,
+      "labelled_seconds": 2123324853,
+      "zero_seconds": 1510080629,
+      "intersection_pairs": 2832437,
+      "labelled_pairs": 1465129,
+      "interaction_seconds_raw": 2123324853,
+      "user_item_pairs": 659890,
+      "users_with_labelled_history": 4806,
+      "positive_pair_seconds_quantiles": {
+        "0.25": 256.0,
+        "0.5": 1226.0,
+        "0.75": 4304.0,
+        "0.9": 7200.0,
+        "0.99": 27447.329999999958
+      }
+    }
+  },
+  "schedule_duplicates_removed": 0,
+  "schedule_nonpositive_duration": 1,
+  "airtime": {
+    "train": {
+      "union_channel_seconds": 2388716160,
+      "labelled_union_channel_seconds": 381224220,
+      "labelled_fraction": 0.1595937710740819
+    },
+    "validation": {
+      "union_channel_seconds": 2429388300,
+      "labelled_union_channel_seconds": 410731500,
+      "labelled_fraction": 0.1690678678249994
+    }
+  },
+  "final_candidates": 6632,
+  "validation_candidates": 6384,
+  "views": {
+    "rows": 5821987,
+    "nonpositive_intervals": 0,
+    "duration_mismatch": 117,
+    "outside_window_rows": 0,
+    "users": 4914,
+    "duration_quantiles_seconds": {
+      "0": 61.0,
+      "0.25": 133.0,
+      "0.5": 396.0,
+      "0.75": 1452.0,
+      "0.9": 3911.0,
+      "0.99": 14080.139999999665,
+      "1": 342145.0
+    }
+  },
+  "preparation_seconds": 19.739733917
+}

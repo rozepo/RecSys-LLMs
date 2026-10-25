@@ -1,0 +1,10 @@
+{
+  "target_view_records": 2173313,
+  "weekly_count_rows": 540759,
+  "records_before_cutoffs": {
+    "18": 1224696,
+    "20": 1435418,
+    "30": 2173313
+  },
+  "seconds": 5.43447775
+}

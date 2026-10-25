@@ -1,0 +1,11 @@
+{
+  "source": "User-reported late-submission scores after Iteration 3; not independently fetched or verified",
+  "final_strategy": "i3_context_top3",
+  "selection_basis": "User instruction: highest reported private score",
+  "scores": {
+    "i3_context_top3": {"private": 0.33189, "public": 0.36188},
+    "i3_context_top1": {"private": 0.33139, "public": 0.36293},
+    "i3_context_top2": {"private": 0.33123, "public": 0.36307},
+    "i3_context_pure": {"private": 0.32657, "public": 0.35848}
+  }
+}

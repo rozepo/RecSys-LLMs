@@ -1,0 +1,11 @@
+{
+  "source": "User-reported late-submission scores after Iteration 2; not independently fetched or verified",
+  "scores": {
+    "i2_context_pop": {"private": 0.32243, "public": 0.34906},
+    "i2_highpop_schedule_hybrid": {"private": 0.30368, "public": 0.31643},
+    "i2_highpop_hybrid": {"private": 0.30075, "public": 0.31962},
+    "i2_best_hybrid": {"private": 0.28466, "public": 0.31535},
+    "i2_pop_schedule": {"private": 0.27079, "public": 0.27745},
+    "i2_recent_pop": {"private": 0.21278, "public": 0.21764}
+  }
+}

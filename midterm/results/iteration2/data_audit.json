@@ -1,0 +1,18 @@
+{
+  "view_rows": 5821987,
+  "weekly_interaction_rows": 2175830,
+  "weekly_channel_rows": 1558551,
+  "seconds": 19.801743375,
+  "cache_comparison": {
+    "train": {
+      "pairs": 856904,
+      "seconds": 2451928356,
+      "exact_match": true
+    },
+    "validation": {
+      "pairs": 659890,
+      "seconds": 2123324853,
+      "exact_match": true
+    }
+  }
+}

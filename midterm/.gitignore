@@ -1,0 +1,11 @@
+data/
+__pycache__/
+*.pyc
+results/*_interactions.csv.gz
+results/*_scores.npz
+results/*_ids.npy
+results/*_candidates.npy
+results/iteration2/*.csv.gz
+results/iteration2/*_scores.npz
+results/iteration3/*.csv.gz
+results/iteration3/*_scores.npz

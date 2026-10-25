@@ -1,0 +1,20 @@
+{
+  "status": "passed",
+  "independent_join_view_rows": 3023,
+  "users": [
+    "15254422709117929476",
+    "7126734326696260921"
+  ],
+  "independent_join_pairs": {
+    "train": 575,
+    "validation": 348
+  },
+  "als_max_equation_residual": 5.551115123125783e-17,
+  "verified_submissions": [
+    "submissions/hybrid.csv",
+    "submissions/ppr.csv",
+    "submissions/popularity.csv",
+    "submissions/history.csv"
+  ],
+  "seconds": 7.255347792
+}
